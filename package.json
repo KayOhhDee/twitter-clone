@@ -11,5 +11,8 @@
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^6.6.6",
     "nuxt": "^3.4.0"
+  },
+  "dependencies": {
+    "@heroicons/vue": "^2.0.17"
   }
 }
