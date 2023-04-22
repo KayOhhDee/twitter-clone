@@ -12,7 +12,7 @@
           </div>
 
           <main class="col-span-12 md:col-span-8 xl:col-span-6">
-
+            <router-view></router-view>
           </main>
 
           <div class="hidden md:block xl:col-span-4 md:col-span-3">
