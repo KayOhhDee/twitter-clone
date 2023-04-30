@@ -26,6 +26,13 @@ export default defineEventHandler(async (event) => {
 
   const token = decodeRefreshToken(refreshToken)
 
+  if(!token) {
+    return sendError(event, createError({
+      statusCode: 401,
+      statusMessage: "Unauthorized"
+    }))
+  }
+
   try {
     const user = await getUserById(token.userId)
 

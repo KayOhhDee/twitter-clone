@@ -1,21 +1,22 @@
+import useFetchApi from "./useFetchApi"
+
 export default () => {
   const useAuthToken = () => useState('auth_token')
   const useAuthUser = () => useState('auth_user')
+  const useAuthLoading = () => useState('auth_loading', () => true)
 
   const setToken = (token) => {
-    const authToken = useAuthToken()
-    authToken.value = token
+    useAuthToken().value = token
   }
 
   const setUser = (user) => {
-    const authUser = useAuthUser()
-    authUser.value = user
+    useAuthUser().value = user
   }
 
   const login = ({ username, password }) => {
     return new Promise(async (resolve, reject) => {
       try {
-        const { data } = await useFetch('/api/auth/login', {
+        const data = await $fetch('/api/auth/login', {
           method: 'POST',
           body: {
             username,
@@ -36,9 +37,20 @@ export default () => {
   const refreshToken = () => {
     return new Promise(async (resolve, reject) => {
       try {
-        const { data } = useFetch('/api/auth/refresh')
-
+        const data = await $fetch('/api/auth/refresh')
         setToken(data.access_token)
+        resolve(true)
+      } catch (error) {
+        reject(error)
+      }
+    })
+  }
+
+  const getUser = () => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const data  = await useFetchApi('/api/auth/user')
+        setUser(data.user)
         resolve(true)
       } catch (error) {
         reject(error)
@@ -49,13 +61,23 @@ export default () => {
   const initAuth = () => {
     return new Promise(async (resolve, reject) => {
       try {
+        useAuthLoading().value = true
         await refreshToken()
+        await getUser()
         resolve(true)
       } catch (error) {
         reject(error)
+      } finally {
+        useAuthLoading().value = false
       }
     })
   }
 
-  return { login, useAuthUser, initAuth }
+  return { 
+    login,  
+    useAuthUser, 
+    initAuth, 
+    useAuthToken,
+    useAuthLoading
+  }
 }
