@@ -1,4 +1,4 @@
-import useFetchApi from "./useFetchApi"
+import jwtDecode from "jwt-decode"
 
 export default () => {
   const useAuthToken = () => useState('auth_token')
@@ -58,12 +58,28 @@ export default () => {
     })
   }
 
+  const reRefreshAccessToken = () => {
+    const authToken = useAuthToken()
+
+    if(!authToken.value) return
+
+    const decodedJwt = jwtDecode(authToken.value)
+
+    const newRefreshTokenTime = decodedJwt.exp - 60000
+
+    setTimeout(async () => {
+      await refreshToken()
+      reRefreshAccessToken()
+    }, newRefreshTokenTime)
+  }
+
   const initAuth = () => {
     return new Promise(async (resolve, reject) => {
       try {
         useAuthLoading().value = true
         await refreshToken()
         await getUser()
+        reRefreshAccessToken()
         resolve(true)
       } catch (error) {
         reject(error)
