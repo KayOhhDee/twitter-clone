@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
     authorId: userId
   }
 
-  const tweet = await createTweet(tweet)
+  const tweet = await createTweet(tweetData)
 
   const filePromises = Object.keys(files).map(async key => {
     const file = files[key]
