@@ -80,7 +80,7 @@
       </div>
 
       <div class="ml-auto">
-        <Button size="sm" @click="handleFormSubmit"><span class="font-bold">Tweet</span></Button>
+        <Button size="sm" @onClick="handleFormSubmit" :disabled="isDisabled"><span class="font-bold">Tweet</span></Button>
       </div>
     </div>
   </div>
@@ -91,17 +91,19 @@ const emits = defineEmits(['onSubmit'])
 
 const { defaultBorderColor } = useTailwind( )
 
-const imageInput = ref()
-const selectedFile = ref(null)
-const inputImageUrl = ref(null)
-const text = ref('')
-
 const props = defineProps({
   user: {
     type: Object,
     required: true
   }
 })
+
+const imageInput = ref()
+const selectedFile = ref(null)
+const inputImageUrl = ref(null)
+const text = ref('')
+
+const isDisabled = computed(() => text.value === '')
 
 const handleFormSubmit = () => {
   emits('onSubmit', {
