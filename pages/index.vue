@@ -1,10 +1,17 @@
 <template>
   <MainContainer title="Home" :loading="loading">
-    <TweetForm :user="user"/>
+    <Head>
+      <Title>Home | Twitter</Title>
+    </Head>
+    <div class="border-b" :class="defaultBorderColor">
+      <TweetForm :user="user"/>
+    </div>
   </MainContainer>
 </template>
 
 <script setup>
+const { defaultBorderColor } = useTailwind()
+
 const loading = ref(false)
 
 const { useAuthUser } = useAuth()
