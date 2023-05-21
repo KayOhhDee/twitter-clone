@@ -6,6 +6,8 @@
     <div class="border-b" :class="defaultBorderColor">
       <TweetForm :user="user"/>
     </div>
+
+    <TweetListFeed />
   </MainContainer>
 </template>
 
